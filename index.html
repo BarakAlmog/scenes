@@ -499,14 +499,22 @@ const FIG={};
  put(kram.g,new THREE.Vector3(.45,0,-1.45),-Math.PI/2);
 
  /* heavyset plaid-shirt player, hunched over the board */
- const newm=seated({wide:1.35,lean:.13,skin:skinN,
+ const newm=seated({wide:1.6,lean:.13,skin:skinN,
    shirt:plaid,pants:mat(0x3a3a40,.85),
    lArm:[-.9,-.95],rArm:[-.95,-.9],
    hairFn:h=>{rbox(h,.27,.09,.27,.03,hairD,0,.17,-.01);
      rbox(h,.27,.13,.09,.03,hairD,0,.07,-.13);
      rbox(h,.05,.06,.22,.02,hairD,-.12,.08,0);
-     rbox(h,.05,.06,.22,.02,hairD,.12,.08,0);}});
- put(newm.g,new THREE.Vector3(-1.35,0,-1.45),Math.PI/2);
+     rbox(h,.05,.06,.22,.02,hairD,.12,.08,0);
+     /* glasses */
+     const gls=mat(0x26262a,.4,.4);
+     for(const s of[-1,1]){
+       const r=M(new THREE.TorusGeometry(.042,.007,8,16),gls);
+       r.position.set(s*.06,0,.128);h.add(r);
+       box(h,.008,.008,.11,gls,s*.105,.015,.07);}
+     box(h,.032,.008,.008,gls,0,.012,.13);}});
+ rbox(newm.g,.52,.36,.36,.1,plaid,0,.6,.12);   /* the belly */
+ put(newm.g,new THREE.Vector3(-1.38,0,-1.45),Math.PI/2);
 
  FIG.kArm=kram.aR;FIG.kHead=kram.headG;FIG.nHead=newm.headG;
 
@@ -558,7 +566,20 @@ const FIG={};
  box(g,.32,.08,.28,mat(0x6b3a8a,.8),.35,2.14,0,.1);
  box(g,.3,.09,.26,mat(0x2a4d8f,.8),-.32,2.045,0,-.08);
  box(g,.28,.08,.24,mat(0x3a7a3f,.8),-.32,2.13,0,.12);
- cyl(g,.03,.04,.14,mat(0xc03030,.6),.05,1.95,.05);
+ /* tiny caped-hero doll on the shelf */
+ {const blu=mat(0x2a4dc8,.55),red=mat(0xc8241e,.55);
+  const d=new THREE.Group();
+  box(d,.05,.055,.028,blu,0,.105,0);
+  box(d,.02,.05,.02,blu,-.014,.045,0);box(d,.02,.05,.02,blu,.014,.045,0);
+  box(d,.022,.018,.024,red,-.014,.012,.004);box(d,.022,.018,.024,red,.014,.012,.004);
+  box(d,.016,.05,.016,blu,-.038,.1,0);
+  const up=box(d,.016,.055,.016,blu,.042,.15,0);up.rotation.z=-.5;
+  const hd=M(new THREE.SphereGeometry(.018,10,8),mat(0xe6b28c,.7));
+  hd.position.set(0,.15,0);d.add(hd);
+  box(d,.022,.01,.022,mat(0x1c1410,.8),0,.163,0);
+  const cape=box(d,.055,.09,.006,red,0,.09,-.022);cape.rotation.x=.12;
+  box(d,.06,.012,.03,red,0,.137,-.012);
+  d.position.set(.05,1.9,.08);d.rotation.y=-.25;g.add(d);}
  scene.add(g);g.position.set(-1.45,0,-3.08);}
 
 /* desk + computer + chair */
