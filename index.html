@@ -448,6 +448,94 @@ let tvScreen,tvLight;
    const px=T.x+Math.cos(a)*.82,pz=T.z+Math.sin(a)*.82;
    put(chair(),new THREE.Vector3(px,0,pz),Math.atan2(-Math.cos(a),-Math.sin(a)));}}
 
+/* ---------- Kramer & Newman locked in a game of Risk ---------- */
+const FIG={};
+{const skinK=mat(0xe6b28c,.75),skinN=mat(0xdfa884,.75),hairD=mat(0x241a12,.9);
+ const plaidTex=canvasTex(64,64,(g)=>{g.fillStyle='#b1a0c6';g.fillRect(0,0,64,64);
+   g.strokeStyle='#6f5e92';g.lineWidth=7;
+   for(let i=0;i<2;i++){g.beginPath();g.moveTo(i*32+8,0);g.lineTo(i*32+8,64);g.stroke();
+     g.beginPath();g.moveTo(0,i*32+8);g.lineTo(64,i*32+8);g.stroke();}
+   g.strokeStyle='#e8e4f0';g.lineWidth=1.6;
+   for(let i=0;i<2;i++){g.beginPath();g.moveTo(i*32+24,0);g.lineTo(i*32+24,64);g.stroke();
+     g.beginPath();g.moveTo(0,i*32+24);g.lineTo(64,i*32+24);g.stroke();}});
+ plaidTex.repeat.set(2,2);
+ const plaid=new THREE.MeshStandardMaterial({map:plaidTex,roughness:.92});
+
+ const seated=o=>{
+   const g=new THREE.Group(),sw=o.wide,sk=o.skin;
+   for(const s of[-1,1]){
+     rbox(g,.14*sw,.12,.4,.045,o.pants,s*.1*sw,.5,.16);
+     rbox(g,.12*sw,.38,.12,.045,o.pants,s*.11*sw,.19,.33);
+     rbox(g,.13*sw,.06,.24,.02,MAT.black,s*.11*sw,.04,.4);}
+   rbox(g,.32*sw,.16,.26,.06,o.pants,0,.54,.02);
+   const torso=rbox(g,.4*sw,.5,.27*sw,.08,o.shirt,0,.84,0);
+   torso.rotation.x=o.lean;
+   cyl(g,.05,.055,.09,sk,0,1.11,.02);
+   const headG=new THREE.Group();headG.position.set(0,1.25,.03);g.add(headG);
+   rbox(headG,.24,.28,.25,.09,sk,0,0,0);
+   o.hairFn(headG);
+   const arm=(s,shX,elX)=>{
+     const sh=new THREE.Group();sh.position.set(s*.24*sw,1.02,.02);g.add(sh);
+     rbox(sh,.1,.3,.11,.04,o.shirt,0,-.12,.02);
+     const el=new THREE.Group();el.position.set(0,-.27,.04);sh.add(el);
+     rbox(el,.085,.26,.09,.035,sk,0,-.1,.05);
+     const hd=M(new THREE.SphereGeometry(.05,10,8),sk);hd.position.set(0,-.23,.08);el.add(hd);
+     sh.rotation.x=shX;sh.rotation.z=s*-.12;el.rotation.x=elX;
+     return{sh,el,hd};};
+   const aL=arm(-1,o.lArm[0],o.lArm[1]),aR=arm(1,o.rArm[0],o.rArm[1]);
+   return{g,headG,aL,aR};};
+
+ /* lanky blue-shirt player, cards held up */
+ const kram=seated({wide:1.0,lean:-.08,skin:skinK,
+   shirt:mat(0x3454a4,.85),pants:mat(0x46413a,.85),
+   lArm:[-1.35,-.85],rArm:[-.55,-.5],
+   hairFn:h=>{rbox(h,.26,.1,.27,.03,hairD,0,.18,-.01);
+     rbox(h,.12,.13,.12,.03,hairD,-.08,.25,-.03,.3);
+     rbox(h,.11,.15,.11,.03,hairD,.02,.27,.01,-.2);
+     rbox(h,.1,.12,.1,.03,hairD,.09,.24,-.04,.5);
+     rbox(h,.05,.1,.2,.02,hairD,0,.1,-.13);}});
+ for(let i=0;i<3;i++)
+   box(kram.aL.el,.055,.075,.004,MAT.white,-.01+i*.018,-.27,.1,(i-1)*.3);
+ put(kram.g,new THREE.Vector3(.45,0,-1.45),-Math.PI/2);
+
+ /* heavyset plaid-shirt player, hunched over the board */
+ const newm=seated({wide:1.35,lean:.13,skin:skinN,
+   shirt:plaid,pants:mat(0x3a3a40,.85),
+   lArm:[-.9,-.95],rArm:[-.95,-.9],
+   hairFn:h=>{rbox(h,.27,.09,.27,.03,hairD,0,.17,-.01);
+     rbox(h,.27,.13,.09,.03,hairD,0,.07,-.13);
+     rbox(h,.05,.06,.22,.02,hairD,-.12,.08,0);
+     rbox(h,.05,.06,.22,.02,hairD,.12,.08,0);}});
+ put(newm.g,new THREE.Vector3(-1.35,0,-1.45),Math.PI/2);
+
+ FIG.kArm=kram.aR;FIG.kHead=kram.headG;FIG.nHead=newm.headG;
+
+ /* world-domination board, armies, dice, cup */
+ const bgame=new THREE.Group();
+ const boardTex=canvasTex(256,176,(g,w,h)=>{
+   g.fillStyle='#e9dfc4';g.fillRect(0,0,w,h);
+   g.strokeStyle='#b5a47c';g.lineWidth=4;g.strokeRect(4,4,w-8,h-8);
+   const blobs=[['#c9a35a',46,52,30,20],['#9ec07a',120,38,26,16],['#c97f5a',196,58,30,22],
+     ['#7fa3c9',64,124,26,18],['#b48ac9',150,120,30,20],['#c9c46a',218,128,22,16]];
+   for(const[c,x,y,rx,ry]of blobs){g.fillStyle=c;g.beginPath();
+     g.ellipse(x,y,rx,ry,(x+y)%2,0,7);g.fill();
+     g.strokeStyle='#8a7a5a';g.lineWidth=1.2;g.stroke();}
+   g.strokeStyle='#9a8a6a';g.lineWidth=1;g.setLineDash([3,3]);
+   g.beginPath();g.moveTo(60,60);g.lineTo(120,45);g.lineTo(196,64);g.stroke();
+   g.beginPath();g.moveTo(70,120);g.lineTo(150,118);g.lineTo(214,126);g.stroke();});
+ const bd=new THREE.Mesh(new THREE.PlaneGeometry(.62,.44),
+   new THREE.MeshStandardMaterial({map:boardTex,roughness:.85}));
+ bd.rotation.x=-Math.PI/2;bd.rotation.z=.18;bd.position.y=.004;bgame.add(bd);
+ const pcols=[0xc23227,0x2a4d8f,0x8a3ac9,0xe6c33c];
+ for(let i=0;i<16;i++){const a=i*2.39,r=.06+((i*37)%19)/100;
+   cyl(bgame,.011,.014,.03,mat(pcols[i%4],.6),Math.cos(a)*r*2.0,.02,Math.sin(a)*r);}
+ cyl(bgame,.04,.034,.07,mat(0xc23227,.5),.34,.04,.1);
+ box(bgame,.05,.004,.07,MAT.white,.27,.006,-.13,.3);
+ box(bgame,.05,.004,.07,MAT.white,.22,.01,-.09,.1);
+ box(bgame,.022,.022,.022,MAT.white,.4,.015,0,.4);
+ box(bgame,.022,.022,.022,MAT.white,.44,.015,.05,.1);
+ bgame.position.set(-.45,.768,-1.45);scene.add(bgame);}
+
 /* bookshelf */
 {const g=new THREE.Group();
  const W=1.3,H=2.15,D=.4;
@@ -771,6 +859,15 @@ function tick(){
   if(tvScreen){const n=.6+.25*Math.sin(t*9.7)+.18*Math.sin(t*23.3)+.1*(Math.random()-.5);
     tvScreen.material.emissiveIntensity=Math.max(.25,n);
     tvLight.intensity=2.2+2.4*Math.max(0,n);}
+
+  /* players' idle motion */
+  if(FIG.kArm){
+    FIG.kArm.sh.rotation.x=-.6+.3*Math.sin(t*.8);
+    FIG.kArm.el.rotation.x=-.5+.25*Math.sin(t*.8+.9);
+    FIG.kHead.rotation.z=.06*Math.sin(t*.7+1);
+    FIG.kHead.rotation.y=.12*Math.sin(t*.45);
+    FIG.nHead.rotation.y=.14*Math.sin(t*.55+2);
+    FIG.nHead.rotation.x=.05*Math.sin(t*1.05);}
 
   /* dust drift */
   {const p=dust.geometry.attributes.position.array;
