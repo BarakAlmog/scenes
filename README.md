@@ -8,6 +8,7 @@ Live: https://barakalmog.github.io/3d-apt/
 
 | Apartment | Path | What it has |
 | --- | --- | --- |
+| Friends: Across the Hall | [`friends/`](https://barakalmog.github.io/3d-apt/friends/) | Monica's apartment and Joey and Chandler's, the hall and the stairs, all six friends, Ross's sofa and PIVOT!, the chick and the duck, light from noon to midnight, the sound stage, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 2 | [`seinfeld-v2/`](https://barakalmog.github.io/3d-apt/seinfeld-v2/) | The whole cast, Kramer's entrance, light from noon to midnight, the sound stage around the set, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 1 | [`seinfeld-v1/`](https://barakalmog.github.io/3d-apt/seinfeld-v1/) | The first model: the room, Kramer and Newman at the Risk board, the door |
 
@@ -30,7 +31,24 @@ Each apartment is its own folder. The root `index.html` is the gallery that link
 | P | Save a picture |
 | ? or H | Help |
 
-The walls nearest the camera drop to a stub, so the rooms open toward you. From straight above, every wall stands, as on a floor plan.
+## Controls (Friends)
+
+| Input | Does |
+| --- | --- |
+| Drag | Orbit. Right-drag or two fingers to pan. |
+| Scroll or pinch | Zoom |
+| Click a thing | The fridges, TVs, recliners, foosball table, Magna Doodle, closet, the chick and the duck: most things do something |
+| 1 to 6 | Overview, Audience, Plan, Monica's, Joey and Chandler's, the hall |
+| V | PIVOT! Ross, Rachel and Chandler take the sofa up the stairs |
+| T | Play the day through; the slider sets the hour |
+| S | Reveal the sound stage around the sets |
+| C | Sitcom broadcast: 4:3, a 90s look, four cameras |
+| F | Walk: WASD or arrows, Shift to hurry, Esc to stop; the stairs go up to the landing |
+| M | Sound on or off |
+| P | Save a picture |
+| ? or H | Help |
+
+In every apartment, the walls nearest the camera drop to a stub, so the rooms open toward you. From straight above, every wall stands, as on a floor plan.
 
 ## Run it locally
 
@@ -45,7 +63,8 @@ Then open http://localhost:8000/ from the repo root.
 ## Credits
 
 - 3D library: [three.js](https://threejs.org/), MIT.
-- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
+- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [friends/audio/CREDITS.md](friends/audio/CREDITS.md) and [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
+- The Friends layout follows Iñaki Aliste Lizarralde's hand-drawn plan of the two apartments, and photos of the sets.
 
 A fan project. The shows and their characters belong to their owners; nothing here is affiliated with them.
 
