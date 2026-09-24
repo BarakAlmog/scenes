@@ -1,18 +1,18 @@
-# The Apartments · 3D
+# Scenes · 3D
 
-Sitcom apartments, built in 3D with three.js and running in the browser.
+A collection of famous scenes, built in 3D with three.js and running in the browser.
 
-Live: https://barakalmog.github.io/3d-apt/
+Live: https://barakalmog.github.io/scenes/
 
 ## The collection
 
-| Apartment | Path | What it has |
+| Scene | Path | What it has |
 | --- | --- | --- |
-| Friends: Across the Hall | [`friends/`](https://barakalmog.github.io/3d-apt/friends/) | Monica's apartment and Joey and Chandler's, the hall and the stairs, all six friends, Ross's sofa and PIVOT!, the chick and the duck, light from noon to midnight, the sound stage, a sitcom broadcast mode, a walk-through, sound |
-| Seinfeld, version 2 | [`seinfeld-v2/`](https://barakalmog.github.io/3d-apt/seinfeld-v2/) | The whole cast, Kramer's entrance, light from noon to midnight, the sound stage around the set, a sitcom broadcast mode, a walk-through, sound |
-| Seinfeld, version 1 | [`seinfeld-v1/`](https://barakalmog.github.io/3d-apt/seinfeld-v1/) | The first model: the room, Kramer and Newman at the Risk board, the door |
+| Friends: Across the Hall | [`friends/`](https://barakalmog.github.io/scenes/friends/) | Monica's apartment and Joey and Chandler's, the hall and the stairs, all six friends, Ross's sofa and PIVOT!, the chick and the duck, light from noon to midnight, the sound stage, a sitcom broadcast mode, a walk-through, sound |
+| Seinfeld, version 2 | [`seinfeld-v2/`](https://barakalmog.github.io/scenes/seinfeld-v2/) | The whole cast, Kramer's entrance, light from noon to midnight, the sound stage around the set, a sitcom broadcast mode, a walk-through, sound |
+| Seinfeld, version 1 | [`seinfeld-v1/`](https://barakalmog.github.io/scenes/seinfeld-v1/) | The first model: the room, Kramer and Newman at the Risk board, the door |
 
-Each apartment is its own folder. The root `index.html` is the gallery that links them.
+Each scene is its own folder. The root `index.html` is the gallery that links them.
 
 ## Controls (Seinfeld v2)
 
@@ -48,7 +48,7 @@ Each apartment is its own folder. The root `index.html` is the gallery that link
 | P | Save a picture |
 | ? or H | Help |
 
-In every apartment, the walls nearest the camera drop to a stub, so the rooms open toward you. From straight above, every wall stands, as on a floor plan.
+In every scene, the walls nearest the camera drop to a stub, so the rooms open toward you. From straight above, every wall stands, as on a floor plan.
 
 ## Run it locally
 
