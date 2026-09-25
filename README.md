@@ -8,12 +8,31 @@ Live: https://barakalmog.github.io/scenes/
 
 | Scene | Path | What it has |
 | --- | --- | --- |
+| The Sopranos: Five Scenes | [`sopranos/`](https://barakalmog.github.io/scenes/sopranos/) | Five scenes: the Pine Barrens chase (a game) on the real ground at Lake Tiorati, Harriman State Park, in the snow; Tony's ducks in the pool and AJ's party at 14 Aspen Drive, North Caldwell; the bear in the yard (a game) in late autumn; "It happens" at the bakery in North Arlington; the Inn at the Oaks from his coma, with its choice. The real sun, moon and stars for each place and date, walk-throughs, sound |
 | Breaking Bad: The Krystal Ship | [`breaking-bad/`](https://barakalmog.github.io/scenes/breaking-bad/) | The RV and its lab at three stops: the pilot site at To'hajiilee on the real terrain, the grassland of 4 Days Out, Old Joe's yard. The cold open, the dead battery, the crusher; drive it, walk into the lab, cinema mode with time-lapse skies, the crew filming it, the real sun, moon and stars for the place and date, sound |
 | Friends: Across the Hall | [`friends/`](https://barakalmog.github.io/scenes/friends/) | Monica's apartment and Joey and Chandler's, the hall and the stairs, all six friends, Ross's sofa and PIVOT!, the chick and the duck, light from noon to midnight, the sound stage, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 2 | [`seinfeld-v2/`](https://barakalmog.github.io/scenes/seinfeld-v2/) | The whole cast, Kramer's entrance, light from noon to midnight, the sound stage around the set, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 1 | [`seinfeld-v1/`](https://barakalmog.github.io/scenes/seinfeld-v1/) | The first model: the room, Kramer and Newman at the Risk board, the door |
 
 Each scene is its own folder. The root `index.html` is the gallery that links them.
+
+## Controls (The Sopranos)
+
+| Input | Does |
+| --- | --- |
+| Drag | Orbit. Right-drag or two fingers to pan. |
+| Scroll or pinch | Zoom |
+| Click a thing | The car, the van, the ramp, the grill, the tub, the gumball machine, the sign: most things tell you about themselves |
+| 1 to 5 | The views of the scene |
+| [ and ] | The scenes: Pine Barrens, the ducks, the bear, the bakery, the Inn |
+| Space | Play the scene: CHASE HIM, FEED THE DUCKS, BEAR WATCH, TAKE A NUMBER, FOLLOW THE BEACON. In a cutscene, Space skips it |
+| In a scene | Mouse or right thumb to look, WASD or the left thumb to move, Shift to hurry, E or USE for the action on screen, click or FIRE to shoot or throw |
+| The bear | F the torch, L the floodlights, B the pots; a shot up in the air scares the bear |
+| T | Play the day through; the slider sets the hour |
+| F | Walk: WASD or arrows, Shift to hurry, Esc to stop |
+| M | Sound on or off |
+| P | Save a picture |
+| ? or H | Help |
 
 ## Controls (Breaking Bad)
 
@@ -83,8 +102,9 @@ Then open http://localhost:8000/ from the repo root.
 ## Credits
 
 - 3D library: [three.js](https://threejs.org/), MIT.
-- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [breaking-bad/audio/CREDITS.md](breaking-bad/audio/CREDITS.md), [friends/audio/CREDITS.md](friends/audio/CREDITS.md) and [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
+- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [sopranos/audio/CREDITS.md](sopranos/audio/CREDITS.md), [breaking-bad/audio/CREDITS.md](breaking-bad/audio/CREDITS.md), [friends/audio/CREDITS.md](friends/audio/CREDITS.md) and [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
 - Breaking Bad's pilot site: elevation from the USGS 3D Elevation Program and aerial imagery from the USDA National Agriculture Imagery Program, both public domain. Stars: the Yale Bright Star Catalogue (5th edition).
+- The Sopranos: the ground at Harriman State Park and North Caldwell from the USGS 3D Elevation Program, the woods from USDA NAIP imagery, both public domain; the roads, the lake, the house's and the pool's outlines from OpenStreetMap, © OpenStreetMap contributors, ODbL.
 - The Friends layout follows Iñaki Aliste Lizarralde's hand-drawn plan of the two apartments, and photos of the sets.
 
 A fan project. The shows and their characters belong to their owners; nothing here is affiliated with them.

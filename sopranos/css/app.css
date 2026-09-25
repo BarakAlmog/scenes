@@ -1,0 +1,281 @@
+:root {
+  --ink: #2f2925; --muted: #857a70; --paper: #f4efe7; --glass: rgba(247, 243, 236, .82);
+  --line: rgba(110, 85, 70, .22); --hover: rgba(110, 85, 70, .1); --accent: #8a2320; --accent2: #b3342c; --tile: #8a2320;
+  --shadow: 0 10px 30px rgba(60, 40, 20, .18), 0 2px 6px rgba(60, 40, 20, .1);
+  --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter: 24px; --bottom: max(18px, env(safe-area-inset-bottom));
+  --views-w: 700px; /* the room the views take at the top right; the subtitle stops short of it */
+  /* measured by the page: the dock, a choice and the goal line; what stands above the dock stands on these */
+  --dock-h: 56px; --choice-h: 0px; --goal-h: 0px; --hud-h: 0px;
+}
+body.night {
+  --ink: #efe6d6; --muted: #a8998a; --paper: #1a1916; --glass: rgba(22, 21, 19, .78);
+  --line: rgba(235, 220, 195, .14); --hover: rgba(235, 220, 195, .08); --shadow: 0 10px 30px rgba(0, 0, 0, .5);
+}
+* { box-sizing: border-box; }
+/* hidden means hidden, whatever display a rule gives the element */
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #171513; color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+
+#app { position: fixed; inset: 0; }
+#app canvas { display: block; touch-action: none; }
+
+/* ---------- title ---------- */
+.title { position: fixed; left: var(--gutter); top: 18px; z-index: 5; pointer-events: none; user-select: none; transition: opacity .4s; color: #fbf6ec; text-shadow: 0 1px 12px rgba(0, 0, 0, .45); }
+.title h1 { margin: 0; font: 700 clamp(19px, 2.8vw, 28px)/1.1 var(--serif); letter-spacing: .2em; display: flex; align-items: center; }
+.title h1 a { color: inherit; text-decoration: none; pointer-events: auto; display: inline-flex; align-items: center; }
+.title h1 a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.title p { margin: 9px 0 0; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; opacity: .85;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100vw - 2 * var(--gutter) - var(--views-w) - 12px); }
+
+/* ---------- the five scenes: a row under the title, clear of the views ---------- */
+#scenes { position: fixed; left: var(--gutter); top: 84px; z-index: 10; display: flex; align-items: center; gap: 0; padding: 5px;
+  border-radius: 14px; background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid var(--line); box-shadow: var(--shadow); transition: opacity .35s; }
+#scenes button { appearance: none; border: 0; background: transparent; cursor: pointer; display: grid; gap: 3px; padding: 7px 12px; border-radius: 10px; text-align: left; transition: background .15s, color .15s; }
+#scenes button b { font: 600 9.5px/1 var(--sans); letter-spacing: .16em; color: var(--muted); }
+#scenes button span { font: 600 13px/1 var(--serif); letter-spacing: .04em; white-space: nowrap; }
+#scenes button em { font: 600 8.5px/1 var(--sans); font-style: normal; letter-spacing: .18em; text-transform: uppercase; color: var(--accent2); }
+#scenes button[aria-pressed="true"] em { color: #f3c7a8; }
+#scenes button { position: relative; }
+#scenes button:hover { background: var(--hover); }
+#scenes button[aria-pressed="true"] { background: var(--accent); color: #f6f1e4; }
+#scenes button[aria-pressed="true"] b { color: rgba(246, 241, 228, .75); }
+#scenes i { width: 14px; height: 1px; background: var(--line); }
+
+/* ---------- control bars ---------- */
+#dock, #views {
+  position: fixed; z-index: 10; display: flex; align-items: center; gap: 4px; padding: 6px; border-radius: 16px;
+  background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.2); backdrop-filter: blur(14px) saturate(1.2);
+  border: 1px solid var(--line); box-shadow: var(--shadow); transition: opacity .35s;
+}
+#dock { left: 50%; bottom: var(--bottom); transform: translateX(-50%); }
+#views { right: var(--gutter); top: 18px; }
+.grp { display: flex; align-items: center; gap: 2px; }
+.grp + .grp { border-left: 1px solid var(--line); padding-left: 6px; margin-left: 2px; }
+#dock button, #views button {
+  appearance: none; border: 0; background: transparent; cursor: pointer; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 7px; padding: 9px 11px; border-radius: 11px;
+  font: 500 12.5px/1 var(--sans); color: var(--ink); transition: background .15s, color .15s;
+}
+#dock button:hover, #views button:hover { background: var(--hover); }
+#dock button[aria-pressed="true"], #views button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+#dock svg, #views svg { width: 17px; height: 17px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+#b-sound .mute { display: none; }
+#b-sound[aria-pressed="false"] .wave { display: none; }
+#b-sound[aria-pressed="false"] .mute { display: inline; }
+.time input[type=range] { width: 118px; accent-color: var(--accent2); cursor: pointer; }
+.time output { min-width: 64px; font: 500 12px var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* the scene button: an element tile */
+#dock #act {
+  margin-left: 6px; background: linear-gradient(160deg, #a62c26, #6a1716); color: #f6f1e4; padding: 8px 15px 8px 8px; border-radius: 11px; gap: 9px;
+  font: 600 13px/1 var(--serif); letter-spacing: .16em; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28), 0 6px 16px rgba(90, 20, 18, .38);
+  transition: transform .12s ease, box-shadow .2s, filter .15s;
+}
+#dock #act .sym { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 3px; border: 1px solid rgba(255, 255, 255, .45);
+  font: 700 14px/1 var(--serif); letter-spacing: 0; background: rgba(0, 0, 0, .15); }
+#dock #act:hover { filter: brightness(1.08); transform: translateY(-1px); }
+#dock #act:active { transform: scale(.96); }
+#dock #act[disabled] { filter: grayscale(.5) brightness(.85); cursor: default; transform: none; }
+#dock #act.busy .sym { animation: spin 2.4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#hint {
+  position: fixed; left: var(--gutter); top: 152px; z-index: 5; margin: 0; max-width: 40vw; color: #fbf6ec; text-shadow: 0 1px 10px rgba(0, 0, 0, .5);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .8; pointer-events: none; transition: opacity .8s;
+}
+#hint.gone { opacity: 0; }
+#goal { position: fixed; left: 50%; top: 78px; transform: translateX(-50%); z-index: 9; margin: 0; padding: 9px 16px; border-radius: 999px; max-width: calc(100vw - 32px);
+  background: rgba(20, 19, 17, .72); color: #f3ead9; font: 500 13px/1.35 var(--sans); letter-spacing: .02em; text-align: center;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .12); box-shadow: 0 8px 24px rgba(0, 0, 0, .3); }
+/* the gauges stand at the top left in a game: the goal line keeps clear of them */
+body:has(#hud:not([hidden])) #goal { max-width: calc(100vw - 2 * var(--gutter) - 400px); }
+#goal b { color: #f0a58f; font-weight: 600; letter-spacing: .12em; margin-right: 8px; font-size: 11px; }
+
+/* ---------- info card, tooltip, bubbles ---------- */
+#card {
+  position: fixed; left: var(--gutter); bottom: calc(var(--bottom) + var(--dock-h) + 14px); z-index: 12; width: min(340px, calc(100vw - 2 * var(--gutter)));
+  padding: 16px 44px 17px 18px; border-radius: 14px; background: var(--glass);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1px solid var(--line); box-shadow: var(--shadow);
+  animation: rise .22s ease-out;
+}
+#card h2 { margin: 0 0 6px; font: 600 17px/1.2 var(--serif); }
+#card p { margin: 0; font-size: 13.5px; line-height: 1.45; opacity: .86; }
+.x { position: absolute; right: 8px; top: 8px; width: 30px; height: 30px; border: 0; border-radius: 9px; background: transparent; cursor: pointer; font-size: 20px; line-height: 1; color: var(--muted); }
+.x:hover { background: var(--hover); color: var(--ink); }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+
+#tip { position: fixed; left: 0; top: 0; z-index: 13; pointer-events: none; padding: 6px 9px; border-radius: 8px; background: var(--ink); color: var(--paper); font: 500 12px var(--sans); white-space: nowrap; }
+#bubbles { position: fixed; inset: 0; z-index: 9; pointer-events: none; overflow: hidden; }
+.bubble {
+  position: absolute; left: 0; top: 0; padding: 9px 13px; border-radius: 14px; background: #fffdf8; color: #2b251e;
+  font: italic 500 15px/1.25 var(--serif); white-space: nowrap; box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+  opacity: 0; transition: opacity .25s; margin-top: -10px;
+}
+.bubble::after { content: ''; position: absolute; left: 50%; bottom: -7px; margin-left: -7px; border: 7px solid transparent; border-bottom: 0; border-top-color: #fffdf8; }
+.bubble.in { opacity: 1; }
+
+/* the episode card when a stop opens */
+#titlecard { position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 16; pointer-events: none; text-align: center; color: #f7f0e2;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, .6); animation: card 3.2s ease forwards; }
+#titlecard b { display: block; font: 600 12px/1 var(--sans); letter-spacing: .4em; opacity: .8; }
+#titlecard span { display: block; margin-top: 12px; font: 600 clamp(30px, 6vw, 58px)/1 var(--serif); letter-spacing: .12em; }
+@keyframes card { 0% { opacity: 0; transform: translate(-50%, -46%); } 18% { opacity: 1; transform: translate(-50%, -50%); } 72% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ---------- walk ---------- */
+#walk-ui { position: fixed; inset: 0; z-index: 14; pointer-events: none; }
+#walk-ui .cross { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .85); box-shadow: 0 0 0 1px rgba(0, 0, 0, .25); transition: transform .15s; }
+#walk-ui .cross.on { transform: scale(1.8); border-color: #ffd08a; }
+.walk-help { position: absolute; left: 50%; top: 22px; transform: translateX(-50%); margin: 0; padding: 9px 14px; border-radius: 999px; background: var(--glass); border: 1px solid var(--line); font-size: 12.5px; white-space: nowrap; box-shadow: var(--shadow); }
+#walk-exit {
+  position: absolute; right: var(--gutter); top: 18px; pointer-events: auto; cursor: pointer; border: 1px solid var(--line);
+  background: var(--glass); padding: 10px 15px; border-radius: 11px; font: 500 12.5px var(--sans); box-shadow: var(--shadow);
+}
+#joy { position: absolute; width: 110px; height: 110px; margin: -55px 0 0 -55px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .5); background: rgba(0, 0, 0, .12); display: none; }
+#joy span { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(255, 255, 255, .8); }
+#joy.on { display: block; }
+
+/* ---------- help ---------- */
+#help {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 20; width: min(480px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto;
+  padding: 22px 24px 18px; border-radius: 16px; background: var(--glass); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  border: 1px solid var(--line); box-shadow: var(--shadow); animation: rise .2s ease-out;
+}
+#help h2 { margin: 0 0 12px; font: 600 20px var(--serif); }
+#help dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 0; font-size: 13.5px; line-height: 1.4; }
+#help dt { font-weight: 600; white-space: nowrap; }
+#help dd { margin: 0; opacity: .86; }
+#help .fine { margin: 16px 0 0; font-size: 11.5px; color: var(--muted); line-height: 1.45; }
+#help .fine a { color: inherit; }
+
+/* ---------- loader, errors ---------- */
+#loader { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; background: #171513; transition: opacity 1.1s ease; text-align: center; }
+#loader h1 { margin: 0; font: 600 clamp(22px, 4vw, 34px) var(--serif); letter-spacing: .24em; color: #efe6d6; }
+#loader p { margin: 12px 0 0; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #a8998a; animation: breathe 1.8s ease-in-out infinite; }
+.failed #loader p { animation: none; color: #e59b88; letter-spacing: .06em; text-transform: none; font-size: 14px; }
+body.ready #loader { opacity: 0; pointer-events: none; }
+@keyframes breathe { 50% { opacity: .45; } }
+#err { position: fixed; left: 50%; top: 14px; transform: translateX(-50%); z-index: 50; max-width: 80vw; padding: 8px 14px; border-radius: 8px; background: #7e2c22; color: #fff; font: 12px ui-monospace, Menlo, monospace; }
+#flash { position: fixed; inset: 0; z-index: 25; background: #fff; pointer-events: none; animation: flash .45s ease-out forwards; }
+@keyframes flash { from { opacity: .7; } to { opacity: 0; } }
+
+body.clean .title, body.clean #dock, body.clean #views, body.clean #hint, body.clean #card, body.clean #tip, body.clean #scenes, body.clean #goal, body.clean #hud, body.clean #captions { display: none !important; }
+
+/* ---------- narrow screens ---------- */
+@media (max-width: 1320px) { :root { --views-w: 236px; } #views span { display: none; } #views button { padding: 9px; } }
+@media (max-width: 1060px) { #dock .modes span { display: none; } #dock .modes button { padding: 9px; } }
+@media (max-width: 760px) {
+  .title p { letter-spacing: .12em; }
+  #hint { max-width: 60vw; }
+}
+@media (max-width: 640px) {
+  :root { --gutter: 12px; --bottom: max(10px, env(safe-area-inset-bottom)); --views-w: 0px; }
+  .title { top: 14px; left: 16px; }
+  .title p { letter-spacing: .14em; font-size: 10px; }
+  /* the views stand in a column on the right, under the stops, so the title keeps the top */
+  #views { left: auto; right: 12px; top: 124px; flex-direction: column; padding: 4px; }
+  #views .grp { gap: 0; flex-direction: column; }
+  #views button { padding: 8px; }
+  /* five scenes across a phone: the type follows the width, and a very narrow screen scrolls the row */
+  #scenes { left: 12px; right: 12px; transform: none; top: 70px; justify-content: space-between; overflow-x: auto; scrollbar-width: none; }
+  #scenes::-webkit-scrollbar { display: none; }
+  #scenes button { flex: none; padding: 6px clamp(3px, 1.3vw, 8px); }
+  #scenes button span { font-size: clamp(10px, 2.9vw, 12px); letter-spacing: .02em; }
+  #scenes i { flex: 1; min-width: 4px; }
+  #hint { top: 132px; left: 16px; max-width: calc(100vw - 88px); font-size: 10px; }
+  #goal, body:has(#hud:not([hidden])) #goal { top: 128px; left: 12px; right: 70px; transform: none; max-width: none; font-size: 12px; }
+  #dock { left: 12px; right: 12px; transform: none; flex-wrap: wrap; justify-content: space-between; row-gap: 4px; }
+  .grp + .grp { border-left: 0; padding-left: 0; margin-left: 0; }
+  #dock .grp.modes { flex: 1; justify-content: space-between; }
+  .grp.time { width: 100%; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+  .time input[type=range] { flex: 1; width: auto; }
+  #dock #act { flex: 1 1 100%; justify-content: center; padding: 7px 12px 7px 7px; font-size: 12px; }
+  .walk-help { white-space: normal; text-align: center; width: calc(100vw - 150px); left: 16px; transform: none; font-size: 11.5px; }
+}
+/* a phone on its side: little height, so the views stand in a column on the right, and the hint goes */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root { --views-w: 52px; }
+  #views { left: auto; top: 12px; right: 12px; flex-direction: column; padding: 4px; }
+  #views .grp { gap: 0; flex-direction: column; }
+  #views button { padding: 7px; }
+  #scenes { right: auto; top: 72px; }
+  #hint { display: none; }
+  #card { max-height: calc(100vh - var(--dock-h) - 110px); overflow: auto; }
+}
+@media (max-width: 400px) { .title h1 { font-size: 17px; } .title p .ep { display: none; } #dock .modes button { padding: 8px 7px; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+/* ---------- captions: the lines, at the bottom like subtitles ---------- */
+#captions { position: fixed; left: 50%; bottom: calc(var(--bottom) + var(--dock-h) + var(--choice-h) + 14px); transform: translateX(-50%); z-index: 15; width: min(760px, calc(100vw - 32px));
+  display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; }
+.cap { max-width: 100%; padding: 7px 14px 8px; border-radius: 9px; background: rgba(12, 11, 10, .66); color: #f7f1e6; text-align: center;
+  font: 500 17px/1.35 var(--serif); letter-spacing: .01em; text-shadow: 0 1px 2px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(4px); transition: opacity .25s, transform .25s; }
+.cap b { display: block; font: 600 9.5px/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: #e6a88f; margin-bottom: 4px; }
+.cap.say { font-style: italic; }
+.cap.note { font: 500 13px/1.4 var(--sans); letter-spacing: .03em; color: #e9e0cf; font-style: normal; }
+.cap.in { opacity: 1; transform: none; }
+/* in first person on a touch screen the lines keep clear of the buttons on the right */
+body.fps.touch #captions { width: min(760px, calc(100vw - 2 * (var(--gutter) + 110px))); }
+
+/* ---------- the game's gauges ---------- */
+#hud { position: fixed; left: var(--gutter); top: 84px; z-index: 12; display: grid; gap: 7px; padding: 10px 12px; border-radius: 12px; min-width: 170px;
+  background: rgba(16, 15, 14, .6); color: #f3ead9; border: 1px solid rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); pointer-events: none; }
+.hud-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font: 600 10px/1 var(--sans); letter-spacing: .2em; }
+.hud-row .val { font: 600 15px/1 var(--serif); letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+.hud-row .bar { position: relative; width: 90px; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .16); overflow: hidden; }
+.hud-row .bar i { position: absolute; inset: 0 auto 0 0; width: 0; background: linear-gradient(90deg, #9cc7e8, #e8f2ff); border-radius: 4px; transition: width .3s; }
+.hud-row .bar.warn i { background: linear-gradient(90deg, #e8b08e, #ff6e5a); }
+.hud-row .bars { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
+.hud-row .bars i { width: 5px; background: rgba(255, 255, 255, .2); border-radius: 1px; }
+.hud-row .bars i:nth-child(1) { height: 25%; } .hud-row .bars i:nth-child(2) { height: 50%; } .hud-row .bars i:nth-child(3) { height: 75%; } .hud-row .bars i:nth-child(4) { height: 100%; }
+.hud-row .bars i.on { background: #f3ead9; }
+
+/* ---------- a choice ---------- */
+#choice { position: fixed; left: 50%; bottom: calc(var(--bottom) + var(--dock-h) + 14px); transform: translateX(-50%); z-index: 17; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; width: min(720px, calc(100vw - 32px)); }
+#choice button { appearance: none; cursor: pointer; padding: 13px 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .22); background: rgba(16, 15, 14, .72); color: #f6efe2;
+  font: 600 14px/1.2 var(--serif); letter-spacing: .06em; box-shadow: 0 10px 28px rgba(0, 0, 0, .4); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: transform .12s, background .15s; }
+#choice button:hover { background: rgba(138, 35, 32, .85); transform: translateY(-1px); }
+#choice button small { display: block; margin-top: 5px; font: 500 11px/1.3 var(--sans); letter-spacing: .04em; opacity: .75; }
+
+/* ---------- touch buttons in first person ---------- */
+#fire, #use { position: absolute; right: calc(var(--gutter) + 6px); pointer-events: auto; width: 78px; height: 78px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .55);
+  background: radial-gradient(circle at 40% 35%, #b3342c, #5e1311); color: #fbe9dc; font: 700 12px var(--sans); letter-spacing: .14em; box-shadow: 0 8px 22px rgba(0, 0, 0, .4); }
+#fire { bottom: calc(var(--bottom) + var(--dock-h) + 14px); }
+#use { bottom: calc(var(--bottom) + var(--dock-h) + 106px); width: 62px; height: 62px; background: radial-gradient(circle at 40% 35%, #6d6760, #2c2926); font-size: 10px; }
+#fire:active, #use:active { transform: scale(.94); }
+/* a game's extra tools on a phone: the torch, the lights, the pots */
+#walk-ui .tools { position: absolute; right: calc(var(--gutter) + 14px); bottom: calc(var(--bottom) + var(--dock-h) + 182px); display: flex; flex-direction: column; gap: 10px; pointer-events: auto; }
+#walk-ui .tools button { width: 54px; height: 54px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .5); background: radial-gradient(circle at 40% 35%, #4b5560, #1f252b);
+  color: #eef2f5; font: 700 9px var(--sans); letter-spacing: .1em; box-shadow: 0 6px 18px rgba(0, 0, 0, .4); }
+#walk-ui .tools button.on { background: radial-gradient(circle at 40% 35%, #d9b24a, #6a5018); color: #1a1408; }
+#walk-ui .tools button:active { transform: scale(.94); }
+
+body.game .title, body.game #hint, body.game #views, body.game #scenes, body.game #card { opacity: 0; pointer-events: none; }
+/* walking: the title, the scenes and the views give the top to the walk help and the exit */
+body.walking .title, body.walking #hint, body.walking #views, body.walking #scenes { opacity: 0; pointer-events: none; }
+body.game #dock .grp.time, body.game #dock #b-walk, body.game #dock #b-photo { display: none; }
+body.game #dock .grp.modes { border-left: 0; padding-left: 0; margin-left: 0; }
+body.game #dock { opacity: .9; }
+body.scripted #dock .grp.time { opacity: .35; pointer-events: none; }
+#titlecard i { display: block; margin-top: 12px; font: italic 500 15px/1.3 var(--serif); letter-spacing: .02em; opacity: .85; }
+@media (max-width: 1120px) { #scenes button em { display: none; } }
+@media (max-width: 640px) {
+  #hud { top: auto; bottom: calc(var(--bottom) + var(--dock-h) + 14px); left: 12px; min-width: 150px; padding: 8px 10px; }
+  /* the gauges stand on the dock at the bottom left: a choice and the lines stand on the gauges */
+  #choice { bottom: calc(var(--bottom) + var(--dock-h) + var(--hud-h) + 14px); }
+  #captions { bottom: calc(var(--bottom) + var(--dock-h) + var(--choice-h) + var(--hud-h) + 14px); }
+  /* in first person the bottom belongs to the thumbs, the gauges and the buttons: the lines go under the goal */
+  body.fps #captions, body.fps.touch #captions { top: calc(128px + var(--goal-h)); bottom: auto; width: calc(100vw - 24px); }
+  /* a game's dock is one row: the sound, the help and the scene button */
+  body.game #dock .grp.modes { flex: none; }
+  body.game #dock #act { flex: 1 1 auto; margin-left: 6px; }
+  .cap { font-size: 15px; }
+}
+/* a phone on its side: the torch, the lights and the pots in a row under the exit; a column would run off the top */
+@media (max-height: 500px) and (orientation: landscape) { #walk-ui .tools { flex-direction: row; top: 70px; bottom: auto; } }

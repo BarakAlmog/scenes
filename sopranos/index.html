@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Sopranos · Five Scenes · 3D</title>
+<meta name="description" content="Five Sopranos scenes in 3D: chase the Russian through the snowy Pine Barrens, feed Tony's ducks, guard the yard from the bear, take a number at the bakery, and follow the beacon to the Inn at the Oaks.">
+<meta name="theme-color" content="#171513">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Sopranos · Five Scenes · 3D">
+<meta property="og:description" content="Chase the Russian through the Pine Barrens, feed the ducks, guard the yard from the bear, take a number at the bakery, follow the beacon.">
+<meta property="og:url" content="https://barakalmog.github.io/scenes/sopranos/">
+<meta property="og:image" content="https://barakalmog.github.io/scenes/sopranos/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://barakalmog.github.io/scenes/sopranos/og.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='6' fill='%23171513'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-weight='700' font-size='34' fill='%23c9352b' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/app.css">
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script>
+  /* never fail silently: runtime errors show on the page, and a load that never finishes says so */
+  (function () {
+    function show(msg) { var e = document.getElementById('err'); if (!e) return; e.textContent = msg; e.hidden = false; }
+    addEventListener('error', function (e) { show('Error: ' + (e.message || (e.target && e.target.src) || 'a script failed to load')); }, true);
+    addEventListener('unhandledrejection', function (e) { show('Error: ' + (e.reason && e.reason.message || e.reason)); });
+    var gl = null; try { var c = document.createElement('canvas'); gl = c.getContext('webgl2'); } catch (_) {}
+    addEventListener('DOMContentLoaded', function () {
+      var status = document.getElementById('loader-status');
+      if (!gl) { status.textContent = 'This browser cannot draw this scene (WebGL 2 is off or missing).'; document.documentElement.classList.add('failed'); return; }
+      setTimeout(function () {
+        if (!window.__aptReady) { status.textContent = 'The 3D engine did not load. Check the connection and reload.'; document.documentElement.classList.add('failed'); }
+      }, 45000);
+    });
+  })();
+</script>
+</head>
+<body>
+<div id="app"></div>
+
+<header class="title">
+  <h1><a href="../" title="All the scenes">THE SOPRANOS</a></h1>
+  <p><span id="where">Five scenes</span></p>
+</header>
+
+<nav id="scenes" aria-label="Scenes">
+  <button type="button" data-scene="pine" aria-pressed="false"><b>S3 E11</b><span>Pine Barrens</span><em>game</em></button>
+  <button type="button" data-scene="ducks" aria-pressed="false"><b>S1 E1</b><span>The Ducks</span></button>
+  <button type="button" data-scene="bear" aria-pressed="false"><b>S5 E1</b><span>The Bear</span><em>game</em></button>
+  <button type="button" data-scene="bakery" aria-pressed="false"><b>S1 E8</b><span>It Happens</span></button>
+  <button type="button" data-scene="inn" aria-pressed="false"><b>S6 E3</b><span>The Inn</span></button>
+</nav>
+
+<nav id="views" aria-label="Views"><div class="grp views" role="group" aria-label="Camera"></div></nav>
+
+<nav id="dock" aria-label="Controls">
+  <div class="grp time" role="group" aria-label="Time of day">
+    <button type="button" id="b-play" aria-pressed="false" title="Play the day (T)" aria-label="Play the day"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    <input id="hour" type="range" min="0" max="24" step="0.05" value="12" aria-label="Time of day">
+    <output id="clock" for="hour">12:00 PM</output>
+  </div>
+  <div class="grp modes" role="group" aria-label="Modes">
+    <button type="button" id="b-walk" aria-pressed="false" title="Walk around (F)"><svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M11 21l2-6-3-3 1-4 4 3 3 1M10 12l-3 2-1 4"/></svg><span>Walk</span></button>
+    <button type="button" id="b-sound" aria-pressed="false" title="Sound on or off (M)"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg><span>Sound</span></button>
+    <button type="button" id="b-photo" title="Save a picture (P)"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Photo</span></button>
+    <button type="button" id="b-help" aria-pressed="false" title="Help (?)" aria-label="Help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg></button>
+  </div>
+  <button type="button" id="act" title="Play the scene (Space)"><span class="sym" aria-hidden="true">S</span><span id="act-label">PLAY</span></button>
+</nav>
+
+<p id="hint"></p>
+<p id="goal" hidden></p>
+
+<aside id="card" hidden aria-live="polite">
+  <h2></h2><p></p>
+  <button type="button" class="x" aria-label="Close">&times;</button>
+</aside>
+<div id="tip" hidden></div>
+<div id="bubbles"></div>
+<div id="titlecard" hidden><b></b><span></span><i></i></div>
+<div id="captions" aria-live="polite"></div>
+
+<div id="hud" hidden>
+  <div class="hud-row" id="hud-ammo" hidden><span class="lab">ROUNDS</span><span class="val"></span></div>
+  <div class="hud-row" id="hud-cold" hidden><span class="lab">COLD</span><span class="bar"><i></i></span></div>
+  <div class="hud-row" id="hud-phone" hidden><span class="lab">SIGNAL</span><span class="bars"><i></i><i></i><i></i><i></i></span></div>
+  <div class="hud-row" id="hud-cash" hidden><span class="lab">DUCK FEED</span><span class="val"></span></div>
+  <div class="hud-row" id="hud-clock" hidden><span class="lab">TIME</span><span class="val"></span></div>
+</div>
+<div id="choice" hidden></div>
+
+<div id="walk-ui" hidden>
+  <div class="cross"></div>
+  <p class="walk-help"></p>
+  <button type="button" id="walk-exit">Exit</button>
+  <div id="joy"><span></span></div>
+  <button type="button" id="fire" hidden aria-label="Fire">FIRE</button>
+  <button type="button" id="use" hidden aria-label="Use"></button>
+</div>
+
+<div id="help" role="dialog" aria-modal="false" aria-labelledby="help-title" hidden>
+  <h2 id="help-title">How to use it</h2>
+  <dl id="help-list"></dl>
+  <p class="fine">A fan project. The Sopranos and its characters belong to their owners. The ground at Lake Tiorati and North Caldwell is USGS 3DEP elevation, the woods come from USDA NAIP imagery; the roads, the lake and the outlines of the house and the pool are &copy; OpenStreetMap contributors (ODbL); the stars are the Yale Bright Star Catalogue. Sounds are CC0 recordings (<a href="https://github.com/BarakAlmog/scenes/blob/main/sopranos/audio/CREDITS.md" target="_blank" rel="noopener">credits</a>). <a href="../">More scenes</a>.</p>
+  <button type="button" class="x" aria-label="Close">&times;</button>
+</div>
+
+<div id="loader">
+  <div>
+    <h1>THE SOPRANOS</h1>
+    <p id="loader-status">Driving out to the woods&hellip;</p>
+  </div>
+</div>
+<div id="err" role="alert" hidden></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
