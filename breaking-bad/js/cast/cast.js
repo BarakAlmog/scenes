@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { app } from '../app.js';
 import { rbox, box, cyl, tube, mat, clamp, damp, dampAngle, wrapAngle, smooth } from '../lib/util.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { makeFigure } from './rig.js';
 import { hotspot } from '../ctrl/hotspots.js';
 import { say } from '../ui/bubbles.js';
@@ -15,6 +16,17 @@ const skin = c => mat(c, .72);
 
 /* ---------- heads ---------- */
 const hairMat = c => mat(c, .9);
+/* a cap that fits the blocky head like hair or a knit hat: the head's own rounded box grown by t, with everything
+   below y0 and above y1 pressed flat, and everything in front of z1 pressed back (a hairline). The pressed parts
+   end up inside the head. lift raises the crown a little. */
+function cap(h, m, t, { y0 = -1, y1 = 1, z1 = 1, lift = 0 } = {}) {
+  const g = new RoundedBoxGeometry(.24 + 2 * t, .28 + 2 * t, .25 + 2 * t, 3, .09 + t), p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    let y = p.getY(i); y = Math.min(y1, Math.max(y0, y)); if (y > .05) y += (y - .05) * lift;
+    p.setY(i, y); if (p.getZ(i) > z1) p.setZ(i, z1);
+  }
+  const o = new THREE.Mesh(g, m); o.castShadow = o.receiveShadow = true; h.add(o); return o;
+}
 function glasses(h, frame = mat(0x6e6a64, .35, .6)) {
   for (const s of [-1, 1]) {
     const g = new THREE.Group(); g.position.set(s * .058, .01, .128); h.add(g);
@@ -27,23 +39,22 @@ function glasses(h, frame = mat(0x6e6a64, .35, .6)) {
 const HEADS = {
   waltPilot(h) {
     const m = hairMat(0x6a5a48), mu = hairMat(0x5a4a3a);
-    rbox(h, .27, .05, .2, .025, m, 0, .13, -.04);                               /* thin on top, a high forehead */
-    for (const s of [-1, 1]) rbox(h, .035, .12, .2, .015, m, s * .125, .04, -.03);
-    rbox(h, .25, .14, .05, .02, m, 0, .03, -.12);
+    /* short hair with a high hairline: down to the ears, and back from the forehead */
+    cap(h, m, .008, { y0: -.02, z1: .055 });
     rbox(h, .1, .025, .03, .01, mu, 0, -.05, .128);                           /* the mustache */
     glasses(h);
   },
+  /* shaved bald from season 1 on, with the goatee */
   waltBald(h) {
-    const m = hairMat(0x7a6c5e), g = hairMat(0x6d5f50);
-    for (const s of [-1, 1]) rbox(h, .025, .08, .16, .01, m, s * .125, .02, -.04);
-    rbox(h, .24, .07, .04, .015, m, 0, .0, -.125);
+    const g = hairMat(0x6d5f50);
     rbox(h, .1, .02, .03, .008, g, 0, -.05, .128);                            /* the goatee */
     rbox(h, .07, .06, .035, .012, g, 0, -.1, .122);
     glasses(h);
   },
   jesse(h, beanie = mat(0x2a2a2c, .95)) {
-    rbox(h, .27, .13, .28, .06, beanie, 0, .1, -.005);                         /* the knit cap */
-    rbox(h, .275, .04, .285, .02, beanie, 0, .045, -.005);
+    /* the knit beanie, pulled down to the brow: the crown a little loose on top, the folded cuff around it */
+    cap(h, beanie, .012, { y0: .03, lift: .18 });
+    cap(h, mat(new THREE.Color(beanie.color).multiplyScalar(1.12).getHex(), .95), .02, { y0: .025, y1: .075 });
     rbox(h, .08, .025, .025, .01, hairMat(0x8a6a48), 0, -.1, .124);            /* stubble */
   },
   hank(h) { rbox(h, .09, .018, .03, .008, hairMat(0x4a3a2c), 0, -.05, .128); },
