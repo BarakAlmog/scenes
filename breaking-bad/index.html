@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Krystal Ship · 3D</title>
+<meta name="description" content="Walter White's RV in the New Mexico desert, in 3D: the real ground at the first cook site, the grassland of 4 Days Out and Old Joe's yard. Drive it, walk the lab, watch the real sky turn.">
+<meta name="theme-color" content="#1c1a17">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Krystal Ship · 3D">
+<meta property="og:description" content="Walter White's RV in the New Mexico desert, in 3D. Drive it, walk the lab, watch the real sky turn.">
+<meta property="og:url" content="https://barakalmog.github.io/scenes/breaking-bad/">
+<meta property="og:image" content="https://barakalmog.github.io/scenes/breaking-bad/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://barakalmog.github.io/scenes/breaking-bad/og.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='6' width='52' height='52' rx='4' fill='%232f6b3f'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='700' font-size='28' fill='%23f4efe2' text-anchor='middle'%3EKr%3C/text%3E%3Ctext x='52' y='18' font-family='Arial,sans-serif' font-size='9' fill='%23f4efe2' text-anchor='end'%3E36%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="css/app.css">
+<script type="importmap">
+{ "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script>
+  /* never fail silently: runtime errors show on the page, and a load that never finishes says so */
+  (function () {
+    function show(msg) { var e = document.getElementById('err'); if (!e) return; e.textContent = msg; e.hidden = false; }
+    addEventListener('error', function (e) { show('Error: ' + (e.message || (e.target && e.target.src) || 'a script failed to load')); }, true);
+    addEventListener('unhandledrejection', function (e) { show('Error: ' + (e.reason && e.reason.message || e.reason)); });
+    var gl = null; try { var c = document.createElement('canvas'); gl = c.getContext('webgl2'); } catch (_) {}
+    addEventListener('DOMContentLoaded', function () {
+      var status = document.getElementById('loader-status');
+      if (!gl) { status.textContent = 'This browser cannot draw this scene (WebGL 2 is off or missing).'; document.documentElement.classList.add('failed'); return; }
+      setTimeout(function () {
+        if (!window.__aptReady) { status.textContent = 'The 3D engine did not load. Check the connection and reload.'; document.documentElement.classList.add('failed'); }
+      }, 40000);
+    });
+  })();
+</script>
+</head>
+<body>
+<div id="app"></div>
+
+<header class="title">
+  <h1><a href="../" title="All the scenes">THE <span class="el" aria-label="K"><sup>36</sup>Kr<sub>83.798</sub></span>YSTAL SHIP</a></h1>
+  <p><span id="where">1986 Fleetwood Bounder &middot; To’hajiilee, New Mexico</span></p>
+</header>
+
+<nav id="stops" aria-label="Episodes">
+  <button type="button" data-stop="pilot" aria-pressed="true"><b>S1 E1</b><span>Pilot</span></button>
+  <i aria-hidden="true"></i>
+  <button type="button" data-stop="days" aria-pressed="false"><b>S2 E9</b><span>4 Days Out</span></button>
+  <i aria-hidden="true"></i>
+  <button type="button" data-stop="sunset" aria-pressed="false"><b>S3 E6</b><span>Sunset</span></button>
+</nav>
+
+<nav id="views" aria-label="Views">
+  <div class="grp views" role="group" aria-label="Camera">
+    <button type="button" data-view="overview" aria-pressed="false" title="Overview (1)"><svg viewBox="0 0 24 24"><path d="M3 15h18M5 15V9h11l3 3v3M7 18a1.5 1.5 0 1 0 0-.01M17 18a1.5 1.5 0 1 0 0-.01"/></svg><span>Overview</span></button>
+    <button type="button" data-view="wide" aria-pressed="false" title="Wide shot (2)"><svg viewBox="0 0 24 24"><path d="M2 18l6-7 4 4 3-3 7 6z"/><circle cx="17" cy="6" r="2"/></svg><span>Wide</span></button>
+    <button type="button" data-view="lab" aria-pressed="false" title="The lab (3)"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4A2 2 0 0 0 19 18l-5-9V3"/><path d="M7.5 15h9"/></svg><span>Lab</span></button>
+    <button type="button" data-view="plan" aria-pressed="false" title="From above (4)"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 8h12M10 12h4M10 15h4"/></svg><span>Plan</span></button>
+    <button type="button" data-view="cab" aria-pressed="false" title="The cab (5)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M4.5 10h5M14.5 10h5M12 14v6"/></svg><span>Cab</span></button>
+  </div>
+</nav>
+
+<nav id="dock" aria-label="Controls">
+  <div class="grp time" role="group" aria-label="Time of day">
+    <button type="button" id="b-play" aria-pressed="false" title="Play the day (T)" aria-label="Play the day"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    <input id="hour" type="range" min="0" max="24" step="0.05" value="14" aria-label="Time of day">
+    <output id="clock" for="hour">2:00 PM</output>
+  </div>
+  <div class="grp modes" role="group" aria-label="Modes">
+    <button type="button" id="b-shoot" aria-pressed="false" title="The shoot: the crew and the set (S)"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="13" height="10" rx="1.5"/><path d="M16 11l5-3v10l-5-3M5 8l2-4h7l2 4"/></svg><span>Shoot</span></button>
+    <button type="button" id="b-cinema" aria-pressed="false" title="Cinema: 2.39:1 and the show's camera (C)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="1.5"/><path d="M2 9h20M2 15h20"/></svg><span>Cinema</span></button>
+    <button type="button" id="b-walk" aria-pressed="false" title="Walk around (F)"><svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M11 21l2-6-3-3 1-4 4 3 3 1M10 12l-3 2-1 4"/></svg><span>Walk</span></button>
+    <button type="button" id="b-drive" aria-pressed="false" title="Drive the RV (R)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.2"/><path d="M3.5 11h6.3M14.2 11h6.3M12 14.2V21"/></svg><span>Drive</span></button>
+    <button type="button" id="b-sound" aria-pressed="false" title="Sound on or off (M)"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg><span>Sound</span></button>
+    <button type="button" id="b-photo" title="Save a picture (P)"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><span>Photo</span></button>
+    <button type="button" id="b-help" aria-pressed="false" title="Help (?)" aria-label="Help"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7M12 17h.01"/></svg></button>
+  </div>
+  <button type="button" id="act" title="Play the scene (Space)"><span class="sym" aria-hidden="true">Kr</span><span id="act-label">COLD OPEN</span></button>
+</nav>
+
+<p id="hint"></p>
+<p id="goal" hidden></p>
+
+<aside id="card" hidden aria-live="polite">
+  <h2></h2><p></p>
+  <button type="button" class="x" aria-label="Close">&times;</button>
+</aside>
+<div id="tip" hidden></div>
+<div id="bubbles"></div>
+<div id="titlecard" hidden><b></b><span></span></div>
+
+<div id="walk-ui" hidden>
+  <div class="cross"></div>
+  <p class="walk-help"></p>
+  <button type="button" id="walk-exit">Exit walk</button>
+  <div id="joy"><span></span></div>
+</div>
+
+<div id="drive-ui" hidden>
+  <p class="drive-help"></p>
+  <div class="gauges"><span id="speed">0</span><small>mph</small></div>
+  <button type="button" id="key" title="Turn the key (E)">KEY</button>
+  <div class="pedals"><button type="button" id="brake">BRAKE</button><button type="button" id="gas">GAS</button></div>
+  <div id="wheel"><span></span></div>
+  <button type="button" id="drive-exit">Exit drive</button>
+</div>
+
+<div id="cinema-ui" hidden>
+  <span id="shotlabel"></span>
+  <button type="button" id="cinema-exit">Exit cinema</button>
+</div>
+
+<div id="help" role="dialog" aria-modal="false" aria-labelledby="help-title" hidden>
+  <h2 id="help-title">How to use it</h2>
+  <dl>
+    <dt>Drag</dt><dd>Orbit around the RV. Right-drag or two fingers to pan. Zoom in close to open it up.</dd>
+    <dt>Scroll / pinch</dt><dd>Zoom in and out.</dd>
+    <dt>Click a thing</dt><dd>The flasks, the door, the gas masks, the clothes on the mirror, Walt and Jesse&hellip; most things do something.</dd>
+    <dt>1 &ndash; 5</dt><dd>Overview, Wide, the Lab, from above, the Cab.</dd>
+    <dt>[ &nbsp;]</dt><dd>The stops: Pilot, 4 Days Out, Sunset.</dd>
+    <dt>Space</dt><dd>The scene: the cold open, the dead battery, the crusher.</dd>
+    <dt>T</dt><dd>Play the day through; the slider sets the hour. The sun, the moon and the stars are the real ones for the place and the date.</dd>
+    <dt>S</dt><dd>The shoot: the crew in the desert, and the lab as a set with its back wall off.</dd>
+    <dt>C</dt><dd>Cinema: 2.39:1 and the show&rsquo;s shots, with time-lapse skies.</dd>
+    <dt>F</dt><dd>Walk: WASD or arrows, Shift to hurry, Esc to stop. The door opens as you reach it.</dd>
+    <dt>R</dt><dd>Drive: E turns the key (it does not always start), W S A D, Space for the horn, V for the camera, Esc to stop.</dd>
+    <dt>M &middot; P</dt><dd>Sound on or off &middot; save a picture.</dd>
+  </dl>
+  <p class="fine">A fan project. Breaking Bad and its characters belong to their owners. The ground at the pilot site is USGS 3DEP elevation and USDA NAIP aerial imagery; the stars are the Yale Bright Star Catalogue. Sounds are CC0 recordings (<a href="https://github.com/BarakAlmog/scenes/blob/main/breaking-bad/audio/CREDITS.md" target="_blank" rel="noopener">credits</a>). <a href="../">More scenes</a>.</p>
+  <button type="button" class="x" aria-label="Close">&times;</button>
+</div>
+
+<div id="loader">
+  <div>
+    <h1>THE KRYSTAL SHIP</h1>
+    <p id="loader-status">Driving out to the desert&hellip;</p>
+  </div>
+</div>
+<div id="err" role="alert" hidden></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

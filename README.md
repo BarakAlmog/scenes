@@ -8,11 +8,31 @@ Live: https://barakalmog.github.io/scenes/
 
 | Scene | Path | What it has |
 | --- | --- | --- |
+| Breaking Bad: The Krystal Ship | [`breaking-bad/`](https://barakalmog.github.io/scenes/breaking-bad/) | The RV and its lab at three stops: the pilot site at To'hajiilee on the real terrain, the grassland of 4 Days Out, Old Joe's yard. The cold open, the dead battery, the crusher; drive it, walk into the lab, cinema mode with time-lapse skies, the crew filming it, the real sun, moon and stars for the place and date, sound |
 | Friends: Across the Hall | [`friends/`](https://barakalmog.github.io/scenes/friends/) | Monica's apartment and Joey and Chandler's, the hall and the stairs, all six friends, Ross's sofa and PIVOT!, the chick and the duck, light from noon to midnight, the sound stage, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 2 | [`seinfeld-v2/`](https://barakalmog.github.io/scenes/seinfeld-v2/) | The whole cast, Kramer's entrance, light from noon to midnight, the sound stage around the set, a sitcom broadcast mode, a walk-through, sound |
 | Seinfeld, version 1 | [`seinfeld-v1/`](https://barakalmog.github.io/scenes/seinfeld-v1/) | The first model: the room, Kramer and Newman at the Risk board, the door |
 
 Each scene is its own folder. The root `index.html` is the gallery that links them.
+
+## Controls (Breaking Bad)
+
+| Input | Does |
+| --- | --- |
+| Drag | Orbit. Right-drag or two fingers to pan. |
+| Scroll or pinch | Zoom; close in, the RV opens up |
+| Click a thing | The flasks, the door, the gas masks, the clothes on the mirror, Walt and Jesse, the crew: most things do something |
+| 1 to 5 | Overview, Wide, the Lab, from above, the Cab |
+| [ and ] | The stops: Pilot, 4 Days Out, Sunset |
+| Space | The scene at this stop: the cold open, the dead battery, the crusher |
+| T | Play the day through; the slider sets the hour |
+| S | The shoot: the crew in the desert, the rear wall off, a camera on a dolly, monitors with both cameras' pictures |
+| C | Cinema: 2.39:1 and the show's kinds of shots, with a time-lapse sky |
+| F | Walk: WASD or arrows, Shift to hurry, Esc to stop; the door opens as you reach it |
+| R | Drive: E turns the key (it does not always start), W S A D, Space for the horn, V for the camera, Esc to stop |
+| M | Sound on or off |
+| P | Save a picture |
+| ? or H | Help |
 
 ## Controls (Seinfeld v2)
 
@@ -63,7 +83,8 @@ Then open http://localhost:8000/ from the repo root.
 ## Credits
 
 - 3D library: [three.js](https://threejs.org/), MIT.
-- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [friends/audio/CREDITS.md](friends/audio/CREDITS.md) and [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
+- Sounds: CC0 and public-domain recordings from Freesound and Wikimedia Commons, listed in [breaking-bad/audio/CREDITS.md](breaking-bad/audio/CREDITS.md), [friends/audio/CREDITS.md](friends/audio/CREDITS.md) and [seinfeld-v2/audio/CREDITS.md](seinfeld-v2/audio/CREDITS.md).
+- Breaking Bad's pilot site: elevation from the USGS 3D Elevation Program and aerial imagery from the USDA National Agriculture Imagery Program, both public domain. Stars: the Yale Bright Star Catalogue (5th edition).
 - The Friends layout follows Iñaki Aliste Lizarralde's hand-drawn plan of the two apartments, and photos of the sets.
 
 A fan project. The shows and their characters belong to their owners; nothing here is affiliated with them.
